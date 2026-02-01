@@ -3,21 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pho Rong | Cuisine Vietnamienne à Laval</title>
-  <meta name="description" content="Bouillon doré mijoté 12 heures, recettes familiales de Hanoï. Un rêve de père en fils. Pho Rong — le goût authentique du Vietnam à Laval.">
+  <title>Pho Rong | Cuisine Vietnamienne Authentique à Laval</title>
+  <meta name="description" content="Bouillon mijoté 12 heures, recettes familiales de Hanoï. Un rêve de père en fils. Pho Rong — le goût authentique du Vietnam à Laval.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
+      --color-bg: hsl(30, 25%, 97%);
+      --color-text: hsl(20, 20%, 15%);
       --color-primary: hsl(18, 70%, 45%);
-      --color-accent: hsl(45, 75%, 55%);
-      --color-bg: hsl(40, 40%, 94%);
-      --color-text: hsl(25, 40%, 18%);
-      --color-muted: hsl(25, 20%, 50%);
-      --font-heading: 'Playfair Display', serif;
+      --color-golden: hsl(38, 80%, 55%);
+      --color-deep-brown: hsl(25, 40%, 18%);
+      --color-muted: hsl(20, 15%, 40%);
+      --color-card: hsl(30, 20%, 95%);
+      --color-border: hsl(30, 20%, 85%);
+      --font-display: 'Playfair Display', serif;
       --font-body: 'Inter', sans-serif;
+      --shadow-soft: 0 4px 20px hsla(25, 40%, 18%, 0.08);
+      --shadow-elevated: 0 8px 30px hsla(25, 40%, 18%, 0.12);
     }
     html { scroll-behavior: smooth; }
     body {
@@ -28,27 +33,61 @@
     }
 
     /* Animations */
-    @keyframes fadeInUp {
+    @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .animate-in {
-      animation: fadeInUp 0.6s ease-out both;
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
     }
+    @keyframes steam {
+      0%, 100% { opacity: 0.3; transform: translateY(0) scale(1); }
+      50% { opacity: 0.6; transform: translateY(-20px) scale(1.1); }
+    }
+    .animate-fade { animation: fadeIn 0.6s ease-out forwards; }
+    .animate-slide { animation: slideUp 0.8s ease-out forwards; }
     .delay-1 { animation-delay: 0.1s; }
     .delay-2 { animation-delay: 0.2s; }
     .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
 
-    /* Header */
+    /* Header - Fixed */
     header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 1.5rem;
-      background: white;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      padding: 1rem 2rem;
+      background: hsla(30, 25%, 97%, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--color-border);
     }
-    .logo { height: 50px; }
+    .logo-text {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+    .header-nav {
+      display: none;
+      gap: 2rem;
+    }
+    @media (min-width: 768px) {
+      .header-nav { display: flex; }
+    }
+    .header-nav a {
+      color: var(--color-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .header-nav a:hover { color: var(--color-primary); }
     .header-cta {
       display: flex;
       align-items: center;
@@ -57,466 +96,1272 @@
       color: white;
       background: var(--color-primary);
       text-decoration: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 6px;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
       font-size: 0.95rem;
-      transition: background 0.2s, transform 0.2s;
+      transition: all 0.2s;
     }
     .header-cta:hover {
       background: hsl(18, 70%, 38%);
       transform: translateY(-1px);
+      box-shadow: var(--shadow-soft);
     }
 
-    /* Hero */
+    /* Hero - Full Screen */
     .hero {
       position: relative;
-      height: 65vh;
-      min-height: 400px;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       background: url('./assets/hero-pho-xutdm7pp.jpg') center/cover no-repeat;
+      overflow: hidden;
     }
     .hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.5));
+      background: linear-gradient(180deg, hsla(25, 40%, 18%, 0.7) 0%, hsla(25, 40%, 18%, 0.4) 100%);
+    }
+    .hero-steam {
+      position: absolute;
+      top: 25%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16rem;
+      height: 16rem;
+      background: hsla(30, 25%, 97%, 0.3);
+      border-radius: 50%;
+      filter: blur(48px);
+      animation: steam 3s ease-in-out infinite;
+      opacity: 0.2;
     }
     .hero-content {
       position: relative;
       z-index: 1;
       color: white;
-      padding: 1.5rem;
-    }
-    .tagline {
-      font-family: var(--font-heading);
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 600;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
-      letter-spacing: 0.02em;
-      margin-bottom: 0.75rem;
-    }
-    .hero-subtitle {
-      font-size: 1rem;
-      font-weight: 400;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      opacity: 0.9;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+      padding: 5rem 1.5rem 2rem;
+      max-width: 64rem;
     }
     .hero-badge {
-      display: inline-block;
-      margin-top: 1.5rem;
-      padding: 0.5rem 1.25rem;
-      background: var(--color-accent);
-      color: var(--color-text);
-      font-weight: 500;
-      font-size: 0.9rem;
-      border-radius: 50px;
-      letter-spacing: 0.05em;
-    }
-
-    /* Sections */
-    section {
-      padding: 3.5rem 1.5rem;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-    h2 {
-      font-family: var(--font-heading);
-      font-size: 1.75rem;
-      color: var(--color-primary);
-      margin-bottom: 1.25rem;
-      letter-spacing: 0.02em;
-    }
-
-    /* Decorative Divider */
-    .divider {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      padding: 1rem 0;
-      color: var(--color-accent);
-    }
-    .divider::before,
-    .divider::after {
-      content: '';
-      width: 60px;
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--color-accent), transparent);
-    }
-    .divider-icon {
-      font-size: 1.25rem;
-    }
-
-    /* Story Section */
-    .story p {
-      font-size: 1.1rem;
-      line-height: 1.9;
-      margin-bottom: 1rem;
-    }
-    .story p:last-of-type {
-      margin-bottom: 1.5rem;
-    }
-    .provenance {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem 1.5rem;
-      padding-top: 1rem;
-      border-top: 1px solid hsl(40, 30%, 85%);
-      font-size: 0.9rem;
-      color: var(--color-muted);
-    }
-    .provenance span::before {
-      content: '✦';
-      margin-right: 0.4rem;
-      color: var(--color-accent);
-    }
-
-    /* Menu Section */
-    .menu-card {
-      background: white;
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
-    .menu-header {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-    .menu-header p {
-      color: var(--color-muted);
-      font-size: 0.95rem;
-    }
-    .menu-items {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .menu-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px dashed hsl(40, 30%, 85%);
-    }
-    .menu-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-    .menu-item-name {
-      font-weight: 500;
-    }
-    .menu-item-desc {
-      font-size: 0.875rem;
-      color: var(--color-muted);
-    }
-    .menu-item-price {
-      font-weight: 500;
-      color: var(--color-primary);
-      white-space: nowrap;
-      margin-left: 1rem;
-    }
-
-    /* Engagement Section */
-    .engagement {
-      background: white;
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
-    .engagement h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-    .promises {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-    .promise {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 1rem;
-    }
-    .promise-check {
-      color: var(--color-accent);
-      font-size: 1.1rem;
-    }
-
-    /* Testimonial Section */
-    .testimonial {
-      text-align: center;
-    }
-    .rating-stars {
-      font-size: 1.5rem;
-      color: var(--color-accent);
-      letter-spacing: 0.1em;
-      margin-bottom: 0.5rem;
-    }
-    .rating-text {
-      font-size: 1.1rem;
-      font-style: italic;
-      color: var(--color-text);
-      margin-bottom: 0.5rem;
-    }
-    .rating-source {
-      font-size: 0.9rem;
-      color: var(--color-muted);
-    }
-
-    /* Contact Section */
-    .contact-grid {
-      display: grid;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    @media (min-width: 500px) {
-      .contact-grid { grid-template-columns: 1fr 1fr; }
-    }
-    .contact-item h3 {
-      font-family: var(--font-heading);
-      font-size: 1.1rem;
-      color: var(--color-primary);
-      margin-bottom: 0.5rem;
-    }
-    .contact-item a {
-      color: var(--color-text);
-      text-decoration: none;
-    }
-    .contact-item a:hover { color: var(--color-primary); }
-
-    /* CTA Buttons */
-    .cta-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    .cta-button {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.875rem 1.5rem;
+      background: hsla(30, 25%, 97%, 0.1);
+      backdrop-filter: blur(8px);
+      border: 1px solid hsla(30, 25%, 97%, 0.2);
+      border-radius: 50px;
+      padding: 0.5rem 1rem;
+      margin-bottom: 2rem;
+      font-size: 0.875rem;
+    }
+    .hero-badge-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      background: var(--color-golden);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    .hero-subtitle {
+      font-size: clamp(1.25rem, 3vw, 1.5rem);
+      opacity: 0.85;
+      max-width: 40rem;
+      margin: 0 auto 1rem;
+      line-height: 1.6;
+    }
+    .hero-accent {
+      display: block;
+      margin-top: 0.75rem;
+      color: var(--color-golden);
+      font-weight: 500;
+    }
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2.5rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
       border-radius: 8px;
       font-weight: 500;
       font-size: 1rem;
       text-decoration: none;
       transition: all 0.2s;
-      min-height: 48px;
+      min-height: 52px;
     }
-    .cta-primary {
-      background: var(--color-primary);
-      color: white;
+    .btn-hero {
+      background: var(--color-golden);
+      color: var(--color-deep-brown);
     }
-    .cta-primary:hover {
-      background: hsl(18, 70%, 38%);
+    .btn-hero:hover {
+      background: hsl(38, 85%, 60%);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    .cta-secondary {
-      background: white;
-      color: var(--color-text);
-      border: 1px solid hsl(40, 30%, 85%);
+    .btn-hero-outline {
+      background: transparent;
+      color: white;
+      border: 2px solid hsla(255,255,255,0.3);
     }
-    .cta-secondary:hover {
-      background: hsl(40, 40%, 96%);
-      border-color: var(--color-primary);
+    .btn-hero-outline:hover {
+      background: hsla(255,255,255,0.1);
+      border-color: hsla(255,255,255,0.5);
     }
-
-    /* Map */
-    .map-container {
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    .hero-info {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 4rem;
+      padding-top: 2rem;
     }
-    .map-container iframe {
-      display: block;
-      width: 100%;
-      height: 250px;
-      border: none;
-    }
-
-    /* Footer */
-    footer {
+    .hero-info-item {
       text-align: center;
-      padding: 2.5rem 1rem;
-      font-size: 0.875rem;
-      color: var(--color-muted);
-      border-top: 1px solid hsl(40, 30%, 88%);
     }
-    .footer-social {
+    .hero-info-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.6;
+      margin-bottom: 0.25rem;
+    }
+    .hero-info-value {
+      font-weight: 600;
+    }
+    .hero-info-divider {
+      display: none;
+      width: 1px;
+      height: 3rem;
+      background: hsla(255,255,255,0.2);
+    }
+    @media (min-width: 640px) {
+      .hero-info-divider { display: block; }
+    }
+
+    /* Social Proof Bar */
+    .social-proof {
+      padding: 1.5rem 2rem;
+      background: var(--color-card);
+      border-bottom: 1px solid var(--color-border);
+      text-align: center;
+    }
+    .social-proof-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--color-muted);
       margin-bottom: 1rem;
     }
-    .footer-social a {
+    .social-proof-rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .stars {
+      color: var(--color-golden);
+      font-size: 1.25rem;
+      letter-spacing: 0.1em;
+    }
+    .rating-text {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    /* Section Styles */
+    .section {
+      padding: 5rem 1.5rem;
+    }
+    .section-narrow {
+      max-width: 48rem;
+      margin: 0 auto;
+    }
+    .section-wide {
+      max-width: 80rem;
+      margin: 0 auto;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .section-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-primary);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+    .section-desc {
+      font-size: 1.125rem;
+      color: var(--color-muted);
+      max-width: 36rem;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+    .section-highlight {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    /* Menu Cards */
+    .menu-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    @media (min-width: 640px) {
+      .menu-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .menu-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .menu-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-soft);
+      transition: all 0.3s;
+    }
+    .menu-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-elevated);
+    }
+    .menu-card-popular {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: hsla(38, 80%, 55%, 0.1);
+      color: var(--color-golden);
+      border-radius: 50px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+    .menu-card-name {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      transition: color 0.2s;
+    }
+    .menu-card:hover .menu-card-name {
+      color: var(--color-primary);
+    }
+    .menu-card-desc {
+      font-size: 0.875rem;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .menu-card-price {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    /* Ingredient Cards */
+    .ingredient-grid {
+      display: grid;
+      gap: 1rem;
+    }
+    @media (min-width: 640px) {
+      .ingredient-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .ingredient-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .ingredient-card {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      transition: all 0.3s;
+    }
+    .ingredient-card:hover {
+      box-shadow: var(--shadow-elevated);
+    }
+    .ingredient-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s;
+    }
+    .ingredient-card:hover img {
+      transform: scale(1.1);
+    }
+    .ingredient-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, var(--color-deep-brown), hsla(25, 40%, 18%, 0.5), transparent);
+    }
+    .ingredient-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem;
+      z-index: 1;
+      color: white;
+    }
+    .ingredient-origin {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.7;
+      margin-bottom: 0.25rem;
+    }
+    .ingredient-name {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    /* Broth Timer Section - Dark */
+    .broth-section {
+      background: var(--color-deep-brown);
+      color: white;
+      padding: 5rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .broth-steam {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(48px);
+      animation: steam 3s ease-in-out infinite;
+    }
+    .broth-steam-1 {
+      top: 0;
+      left: 25%;
+      width: 8rem;
+      height: 8rem;
+      background: hsla(30, 25%, 97%, 0.1);
+    }
+    .broth-steam-2 {
+      top: 2.5rem;
+      right: 33%;
+      width: 10rem;
+      height: 10rem;
+      background: hsla(30, 25%, 97%, 0.08);
+      animation-delay: 1s;
+    }
+    .broth-steam-3 {
+      top: 1.25rem;
+      left: 50%;
+      width: 6rem;
+      height: 6rem;
+      background: hsla(30, 25%, 97%, 0.12);
+      animation-delay: 2s;
+    }
+    .broth-content {
+      position: relative;
+      z-index: 1;
+      max-width: 64rem;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .broth-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: hsla(30, 25%, 97%, 0.1);
+      backdrop-filter: blur(8px);
+      border: 1px solid hsla(30, 25%, 97%, 0.2);
+      border-radius: 50px;
+      padding: 0.5rem 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+    .broth-icon {
+      color: var(--color-golden);
+    }
+    .broth-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .broth-desc {
+      color: hsla(30, 25%, 97%, 0.7);
+      font-size: 1.125rem;
+      max-width: 40rem;
+      margin: 0 auto 2.5rem;
+    }
+    .broth-timer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .broth-timer-unit {
+      text-align: center;
+    }
+    .broth-timer-value {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 10vw, 6rem);
+      font-weight: 700;
+      color: var(--color-golden);
+      line-height: 1;
+    }
+    .broth-timer-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      opacity: 0.6;
+      margin-top: 0.5rem;
+    }
+    .broth-timer-sep {
+      font-size: 2.5rem;
+      color: var(--color-golden);
+      font-weight: 300;
+    }
+    .broth-progress {
+      max-width: 32rem;
+      margin: 0 auto 2rem;
+    }
+    .broth-progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      opacity: 0.6;
+      margin-bottom: 0.5rem;
+    }
+    .broth-progress-labels span:nth-child(2) {
+      color: var(--color-golden);
+      font-weight: 500;
+      opacity: 1;
+    }
+    .broth-progress-bar {
+      height: 0.75rem;
+      background: hsla(30, 25%, 97%, 0.1);
+      border-radius: 50px;
+      overflow: hidden;
+    }
+    .broth-progress-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(to right, var(--color-primary), var(--color-golden));
+      border-radius: 50px;
+    }
+    .broth-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 28rem;
+      margin: 0 auto;
+    }
+    .broth-stat {
+      text-align: center;
+    }
+    .broth-stat-icon {
+      color: var(--color-golden);
+      margin-bottom: 0.5rem;
+    }
+    .broth-stat-value {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .broth-stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.6;
+    }
+
+    /* About Section */
+    .about-section {
+      background: hsla(35, 30%, 90%, 0.5);
+    }
+    .about-text {
+      font-size: 1.125rem;
+      color: var(--color-muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .about-text:last-of-type {
+      margin-bottom: 0;
+    }
+    .about-highlight {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+    .about-primary {
+      color: var(--color-primary);
+      font-weight: 500;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+    @media (min-width: 1024px) {
+      .stats-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+      transition: all 0.3s;
+    }
+    .stat-card:hover {
+      box-shadow: var(--shadow-elevated);
+    }
+    .stat-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+      background: hsla(18, 70%, 45%, 0.1);
+      color: var(--color-primary);
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--color-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Promise Section */
+    .promise-section {
+      background: linear-gradient(to bottom, var(--color-bg), hsla(35, 30%, 90%, 0.3));
+      position: relative;
+      overflow: hidden;
+    }
+    .promise-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 16rem;
+      height: 16rem;
+      background: hsla(18, 70%, 45%, 0.05);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      filter: blur(48px);
+    }
+    .promise-section::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 20rem;
+      height: 20rem;
+      background: hsla(38, 80%, 55%, 0.05);
+      border-radius: 50%;
+      transform: translate(33%, 33%);
+      filter: blur(48px);
+    }
+    .promise-content {
+      position: relative;
+      z-index: 1;
+    }
+    .promise-quote-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 4rem;
+      height: 4rem;
+      background: hsla(18, 70%, 45%, 0.1);
+      border-radius: 50%;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+      color: var(--color-primary);
+    }
+    .promise-text {
+      font-size: 1.125rem;
+      color: var(--color-muted);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+    .promise-signature {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid hsla(30, 20%, 85%, 0.5);
+      max-width: 20rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .promise-signature-name {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-style: italic;
+      margin-bottom: 0.25rem;
+    }
+    .promise-signature-title {
+      font-size: 0.875rem;
+      color: var(--color-muted);
+    }
+    .promise-values {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 4rem;
+      max-width: 36rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .promise-value {
+      text-align: center;
+    }
+    .promise-value-number {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.25rem;
+    }
+    .promise-value-label {
+      font-size: 0.875rem;
+      color: var(--color-muted);
+    }
+
+    /* Location Section */
+    .location-grid {
+      display: grid;
+      gap: 3rem;
+    }
+    @media (min-width: 1024px) {
+      .location-grid { grid-template-columns: 1fr 1fr; align-items: center; }
+    }
+    .location-map {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-elevated);
+      height: 20rem;
+    }
+    @media (min-width: 1024px) {
+      .location-map { height: 31rem; }
+    }
+    .location-map iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      filter: grayscale(100%);
+      transition: filter 0.5s;
+    }
+    .location-map:hover iframe {
+      filter: grayscale(0%);
+    }
+    .location-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .location-item {
+      display: flex;
+      gap: 1rem;
+    }
+    .location-icon {
+      flex-shrink: 0;
+      width: 3rem;
+      height: 3rem;
+      background: hsla(18, 70%, 45%, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary);
+      font-size: 1.25rem;
+    }
+    .location-item-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .location-item-text {
+      color: var(--color-muted);
+    }
+    .location-item-text a {
       color: var(--color-muted);
       text-decoration: none;
       transition: color 0.2s;
     }
-    .footer-social a:hover {
+    .location-item-text a:hover {
       color: var(--color-primary);
     }
+    .location-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .btn-warm {
+      background: var(--color-primary);
+      color: white;
+    }
+    .btn-warm:hover {
+      background: hsl(18, 70%, 38%);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-soft);
+    }
+    .btn-subtle {
+      background: hsla(18, 70%, 45%, 0.1);
+      color: var(--color-primary);
+    }
+    .btn-subtle:hover {
+      background: hsla(18, 70%, 45%, 0.15);
+    }
 
-    /* Mobile Enhancements */
-    @media (max-width: 480px) {
-      section { padding: 2.5rem 1.25rem; }
-      .hero { min-height: 350px; height: 55vh; }
-      .tagline { font-size: 1.75rem; }
-      .hero-subtitle { font-size: 0.85rem; letter-spacing: 0.1em; }
-      .cta-group { flex-direction: column; }
-      .cta-button { justify-content: center; width: 100%; }
-      .menu-item { flex-direction: column; gap: 0.25rem; }
-      .menu-item-price { margin-left: 0; }
+    /* Footer */
+    footer {
+      background: var(--color-deep-brown);
+      color: white;
+      padding: 4rem 1.5rem 2rem;
+    }
+    .footer-grid {
+      display: grid;
+      gap: 3rem;
+      max-width: 80rem;
+      margin: 0 auto;
+    }
+    @media (min-width: 768px) {
+      .footer-grid { grid-template-columns: 2fr 1fr 1fr; }
+    }
+    .footer-brand {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .footer-desc {
+      color: hsla(30, 25%, 97%, 0.8);
+      max-width: 24rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+    .footer-socials {
+      display: flex;
+      gap: 0.75rem;
+    }
+    .footer-social {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: hsla(30, 25%, 97%, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-decoration: none;
+      transition: background 0.2s;
+      font-size: 1.125rem;
+    }
+    .footer-social:hover {
+      background: hsla(30, 25%, 97%, 0.2);
+    }
+    .footer-title {
+      font-weight: 600;
+      font-size: 1.125rem;
+      margin-bottom: 1rem;
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .footer-links a {
+      color: hsla(30, 25%, 97%, 0.8);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover {
+      color: white;
+    }
+    .footer-hours {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      color: hsla(30, 25%, 97%, 0.8);
+    }
+    .footer-hours-row {
+      display: flex;
+      justify-content: space-between;
+    }
+    .footer-bottom {
+      border-top: 1px solid hsla(30, 25%, 97%, 0.1);
+      margin-top: 3rem;
+      padding-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      max-width: 80rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .footer-copyright {
+      color: hsla(30, 25%, 97%, 0.6);
+      font-size: 0.875rem;
+    }
+    .footer-legal {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .footer-legal a {
+      color: hsla(30, 25%, 97%, 0.6);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+    .footer-legal a:hover {
+      color: white;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 640px) {
+      header { padding: 0.75rem 1rem; }
+      .logo-text { font-size: 1.5rem; }
+      .header-cta { padding: 0.5rem 1rem; font-size: 0.875rem; }
+      .hero-content { padding: 6rem 1rem 2rem; }
+      .section { padding: 3rem 1rem; }
+      .broth-timer { gap: 0.5rem; }
+      .broth-timer-sep { font-size: 1.5rem; }
+      .broth-stats { gap: 1rem; }
+      .promise-values { gap: 1rem; }
+      .btn { padding: 0.875rem 1.5rem; width: 100%; justify-content: center; }
     }
   </style>
 </head>
 <body>
+  <!-- Header -->
   <header>
-    <img src="./assets/logo.jpg" alt="Pho Rong" class="logo">
+    <a href="/" class="logo-text">Pho Rong</a>
+    <nav class="header-nav">
+      <a href="#menu">Menu</a>
+      <a href="#about">Notre histoire</a>
+      <a href="#location">Nous trouver</a>
+    </nav>
     <a href="tel:+14503149388" class="header-cta">
-      <span>📞</span> Appelez-nous
+      <span>📞</span> 450-314-9388
     </a>
   </header>
 
+  <!-- Hero -->
   <section class="hero" role="banner">
-    <div class="hero-content animate-in">
-      <h1 class="tagline">Le goût de Hanoï à Laval</h1>
-      <p class="hero-subtitle">Bouillon mijoté 12h • Recettes de Hanoï • Depuis 2024</p>
-      <span class="hero-badge">⭐ 5.0 sur Uber Eats</span>
-    </div>
-  </section>
-
-  <div class="divider"><span class="divider-icon">◆</span></div>
-
-  <section class="story animate-in delay-1">
-    <h2>Notre histoire</h2>
-    <p>Un rêve de père en fils, né dans les ruelles parfumées de Hanoï.</p>
-    <p>Chaque matin, notre bouillon commence son voyage de 12 heures — os de bœuf, étoiles d'anis, bâtons de cannelle, cardamome. Le résultat: un phở doré, limpide, réconfortant comme un souvenir d'enfance.</p>
-    <p>Bienvenue chez Pho Rong. Prenez place. Respirez. Savourez.</p>
-    <div class="provenance">
-      <span>Bœuf AAA du Québec</span>
-      <span>Herbes fraîches</span>
-      <span>Épices importées de Hanoï</span>
-    </div>
-  </section>
-
-  <div class="divider"><span class="divider-icon">◆</span></div>
-
-  <section class="menu animate-in delay-2">
-    <div class="menu-card">
-      <div class="menu-header">
-        <h2>Notre carte</h2>
-        <p>Menu complet bientôt disponible</p>
+    <div class="hero-steam"></div>
+    <div class="hero-content">
+      <div class="hero-badge animate-fade">
+        <span class="hero-badge-dot"></span>
+        <span>Cuisine vietnamienne authentique à Laval</span>
       </div>
-      <div class="menu-items">
-        <div class="menu-item">
-          <div>
-            <div class="menu-item-name">Phở Tái</div>
-            <div class="menu-item-desc">Bœuf saignant, bouillon 12h</div>
+      <h1 class="hero-title animate-slide">Pho Rong</h1>
+      <p class="hero-subtitle animate-fade delay-2">
+        Bouillon mijoté 12 heures. Recettes familiales de Hanoï.
+        <span class="hero-accent">Chaque bol, un voyage.</span>
+      </p>
+      <div class="hero-ctas animate-fade delay-4">
+        <a href="#menu" class="btn btn-hero">Voir notre menu</a>
+        <a href="tel:+14503149388" class="btn btn-hero-outline">Commander</a>
+      </div>
+      <div class="hero-info animate-fade delay-4">
+        <div class="hero-info-item">
+          <div class="hero-info-label">Ouvert</div>
+          <div class="hero-info-value">Tous les jours</div>
+        </div>
+        <div class="hero-info-divider"></div>
+        <div class="hero-info-item">
+          <div class="hero-info-label">Heures</div>
+          <div class="hero-info-value">10h30 – 20h30</div>
+        </div>
+        <div class="hero-info-divider"></div>
+        <div class="hero-info-item">
+          <div class="hero-info-label">Téléphone</div>
+          <div class="hero-info-value">450-314-9388</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <div class="social-proof">
+    <div class="social-proof-label">Nos clients nous adorent</div>
+    <div class="social-proof-rating">
+      <span class="stars">★★★★★</span>
+      <span class="rating-text">5.0 sur Uber Eats</span>
+    </div>
+  </div>
+
+  <!-- Menu Section -->
+  <section id="menu" class="section">
+    <div class="section-wide">
+      <div class="section-header">
+        <div class="section-label">Notre menu</div>
+        <h2 class="section-title">Des plats qui racontent des histoires</h2>
+        <p class="section-desc">
+          Nous préparons seulement 40 bols de notre Phở Đặc Biệt chaque jour — quand il n'y en a plus, c'est fini. <span class="section-highlight">L'excellence exige des limites.</span>
+        </p>
+      </div>
+      <div class="menu-grid">
+        <div class="menu-card">
+          <div class="menu-card-popular">★ Populaire</div>
+          <h3 class="menu-card-name">Phở Bò Đặc Biệt</h3>
+          <p class="menu-card-desc">Tranches de bœuf saignant dans notre bouillon 12 heures. Nouilles de riz soyeuses, boulettes maison, brisket tendre.</p>
+          <div class="menu-card-price">17,99 $</div>
+        </div>
+        <div class="menu-card">
+          <h3 class="menu-card-name">Phở Gà</h3>
+          <p class="menu-card-desc">Poulet poché jusqu'à la tendreté parfaite, niché sur des nouilles translucides. Le bouillon murmure gingembre, anis étoilé et réconfort.</p>
+          <div class="menu-card-price">15,99 $</div>
+        </div>
+        <div class="menu-card">
+          <div class="menu-card-popular">★ Populaire</div>
+          <h3 class="menu-card-name">Cơm 3 Màu</h3>
+          <p class="menu-card-desc">Riz trois couleurs. Porc caramélisé, poulet grillé et crevettes sautées sur un lit de riz parfumé.</p>
+          <div class="menu-card-price">20,99 $</div>
+        </div>
+        <div class="menu-card">
+          <h3 class="menu-card-name">Bánh Mì Thịt Nướng</h3>
+          <p class="menu-card-desc">Baguette croustillante garnie de porc mariné à la citronnelle, pâté maison et daikon mariné.</p>
+          <div class="menu-card-price">12,99 $</div>
+        </div>
+        <div class="menu-card">
+          <h3 class="menu-card-name">Gỏi Cuốn</h3>
+          <p class="menu-card-desc">Rouleaux de printemps frais. Basilic thaï, menthe et coriandre enveloppant crevettes et porc. Sauce aux arachides.</p>
+          <div class="menu-card-price">9,99 $</div>
+        </div>
+        <div class="menu-card">
+          <h3 class="menu-card-name">Rouleaux Impériaux</h3>
+          <p class="menu-card-desc">4 pièces dorées et croustillantes. Servis avec notre sauce nuoc mam maison.</p>
+          <div class="menu-card-price">7,99 $</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ingredient Showcase -->
+  <section class="section" style="background: hsla(35, 30%, 90%, 0.3);">
+    <div class="section-wide">
+      <div class="section-header">
+        <div class="section-label">L'art de la sélection</div>
+        <h2 class="section-title">Chaque ingrédient a une histoire</h2>
+        <p class="section-desc">
+          Nous parcourons des milliers de kilomètres et travaillons avec des artisans locaux pour vous offrir des ingrédients qui honorent l'esprit de la cuisine vietnamienne.
+        </p>
+      </div>
+      <div class="ingredient-grid">
+        <div class="ingredient-card">
+          <img src="https://images.unsplash.com/photo-1569058242567-93de6f36f8eb?w=400&h=300&fit=crop" alt="Nouilles de riz" loading="lazy">
+          <div class="ingredient-content">
+            <div class="ingredient-origin">Delta du Mékong</div>
+            <div class="ingredient-name">Nouilles de riz</div>
           </div>
-          <div class="menu-item-price">17,99 $</div>
         </div>
-        <div class="menu-item">
-          <div>
-            <div class="menu-item-name">Cơm 3 Màu</div>
-            <div class="menu-item-desc">Riz trois couleurs</div>
+        <div class="ingredient-card">
+          <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&h=300&fit=crop" alt="Anis étoilé" loading="lazy">
+          <div class="ingredient-content">
+            <div class="ingredient-origin">Province de Lạng Sơn</div>
+            <div class="ingredient-name">Anis étoilé</div>
           </div>
-          <div class="menu-item-price">20,99 $</div>
         </div>
-        <div class="menu-item">
-          <div>
-            <div class="menu-item-name">Rouleaux Impériaux</div>
-            <div class="menu-item-desc">Croustillants, sauce nuoc mam</div>
+        <div class="ingredient-card">
+          <img src="https://images.unsplash.com/photo-1527792492728-08d07d011113?w=400&h=300&fit=crop" alt="Basilic thaï" loading="lazy">
+          <div class="ingredient-content">
+            <div class="ingredient-origin">Fermes locales du Québec</div>
+            <div class="ingredient-name">Basilic thaï</div>
           </div>
-          <div class="menu-item-price">7,99 $</div>
+        </div>
+        <div class="ingredient-card">
+          <img src="https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=400&h=300&fit=crop" alt="Os de bœuf" loading="lazy">
+          <div class="ingredient-content">
+            <div class="ingredient-origin">Bœuf AAA du Québec</div>
+            <div class="ingredient-name">Os de bœuf</div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="divider"><span class="divider-icon">◆</span></div>
-
-  <section class="animate-in delay-2">
-    <div class="engagement">
-      <h2>Notre engagement</h2>
-      <div class="promises">
-        <div class="promise">
-          <span class="promise-check">✓</span>
-          <span>Bouillon frais préparé chaque jour</span>
+  <!-- Broth Timer Section -->
+  <section class="broth-section">
+    <div class="broth-steam broth-steam-1"></div>
+    <div class="broth-steam broth-steam-2"></div>
+    <div class="broth-steam broth-steam-3"></div>
+    <div class="broth-content">
+      <div class="broth-badge">
+        <span class="broth-icon">🔥</span>
+        <span>En direct de notre cuisine</span>
+      </div>
+      <h2 class="broth-title">Notre bouillon mijote</h2>
+      <p class="broth-desc">
+        Notre légendaire bouillon de phở commence son voyage à 5h00 chaque matin.
+        Le temps transforme de simples os et épices en or liquide.
+      </p>
+      <div class="broth-timer">
+        <div class="broth-timer-unit">
+          <div class="broth-timer-value">12</div>
+          <div class="broth-timer-label">Heures</div>
         </div>
-        <div class="promise">
-          <span class="promise-check">✓</span>
-          <span>Sans MSG ajouté</span>
+        <div class="broth-timer-sep">:</div>
+        <div class="broth-timer-unit">
+          <div class="broth-timer-value">00</div>
+          <div class="broth-timer-label">Minutes</div>
         </div>
-        <div class="promise">
-          <span class="promise-check">✓</span>
-          <span>Ingrédients locaux quand possible</span>
+      </div>
+      <div class="broth-progress">
+        <div class="broth-progress-labels">
+          <span>0h</span>
+          <span>Perfection 12 heures</span>
+          <span>12h</span>
+        </div>
+        <div class="broth-progress-bar">
+          <div class="broth-progress-fill"></div>
+        </div>
+      </div>
+      <div class="broth-stats">
+        <div class="broth-stat">
+          <div class="broth-stat-icon">⏱️</div>
+          <div class="broth-stat-value">12h</div>
+          <div class="broth-stat-label">Temps de cuisson</div>
+        </div>
+        <div class="broth-stat">
+          <div class="broth-stat-icon">🌡️</div>
+          <div class="broth-stat-value">95°C</div>
+          <div class="broth-stat-label">Température parfaite</div>
+        </div>
+        <div class="broth-stat">
+          <div class="broth-stat-icon">🌿</div>
+          <div class="broth-stat-value">7</div>
+          <div class="broth-stat-label">Épices utilisées</div>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="divider"><span class="divider-icon">◆</span></div>
-
-  <section class="testimonial animate-in delay-3">
-    <h2>Ce qu'ils disent</h2>
-    <div class="rating-stars">★★★★★</div>
-    <p class="rating-text">"5 étoiles sur Uber Eats"</p>
-    <p class="rating-source">Nos premiers clients nous font confiance</p>
-  </section>
-
-  <div class="divider"><span class="divider-icon">◆</span></div>
-
-  <section class="contact animate-in delay-3">
-    <h2>Nous trouver</h2>
-    <div class="contact-grid">
-      <div class="contact-item">
-        <h3>Adresse</h3>
-        <p>3520 Boulevard Dagenais O<br>Laval, QC H7P 1V7</p>
+  <!-- About Section -->
+  <section id="about" class="section about-section">
+    <div class="section-narrow">
+      <div class="section-header">
+        <div class="section-label">Notre histoire</div>
+        <h2 class="section-title">D'une rue de Hanoï à Laval</h2>
       </div>
-      <div class="contact-item">
-        <h3>Téléphone</h3>
-        <p><a href="tel:+14503149388">450-314-9388</a></p>
+      <p class="about-text">
+        Mon père m'a appris à faire le bouillon. Ça prend 12 heures — pas de raccourci.
+        Os de bœuf, anis étoilé, cannelle, cardamome. On le prépare chaque matin à 5h.
+        <span class="about-highlight">C'est comme ça qu'on faisait à Hanoï.</span>
+      </p>
+      <p class="about-text">
+        Aujourd'hui, nous perpétuons cette tradition à Laval. Chaque bol raconte notre
+        histoire de père en fils. Pho Rong est né — non pas comme un restaurant, mais comme
+        <span class="about-highlight">une extension de notre table familiale</span>.
+      </p>
+      <p class="about-text">
+        Aujourd'hui, ce même carnet de recettes est dans notre cuisine, protégé par le verre.
+        Nous suivons toujours chaque instruction, chaque mesure, chaque rituel.
+        <span class="about-primary">Certaines choses sont trop précieuses pour être modernisées.</span>
+      </p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👨‍👩‍👧</div>
+          <div class="stat-value">Famille</div>
+          <div class="stat-label">Père et fils</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-value">2024</div>
+          <div class="stat-label">Année d'ouverture</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⏱️</div>
+          <div class="stat-value">12h</div>
+          <div class="stat-label">Bouillon mijoté</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">❤️</div>
+          <div class="stat-value">100%</div>
+          <div class="stat-label">Fait avec amour</div>
+        </div>
       </div>
-      <div class="contact-item">
-        <h3>Heures d'ouverture</h3>
-        <p>Tous les jours<br>10h30 – 20h30</p>
-      </div>
-      <div class="contact-item">
-        <h3>Commandez en ligne</h3>
-        <p><a href="https://www.ubereats.com/ca-fr/store/pho-rong/fJG6CMrkT_GGXJ2ZF3VBBA" target="_blank" rel="noopener">Uber Eats</a></p>
-      </div>
-    </div>
-
-    <div class="cta-group">
-      <a href="tel:+14503149388" class="cta-button cta-primary">
-        <span>📞</span> Appelez pour commander
-      </a>
-      <a href="https://instagram.com/phorong" class="cta-button cta-secondary" target="_blank" rel="noopener">
-        <span>📸</span> Suivez-nous @phorong
-      </a>
-    </div>
-
-    <div class="map-container">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2792.8!2d-73.785!3d45.575!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cc925!2s3520%20Boulevard%20Dagenais%20O%2C%20Laval%2C%20QC%20H7P%201V7!5e0!3m2!1sfr!2sca!4v1706745600000"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        title="Carte de Pho Rong"
-        aria-label="Carte montrant l'emplacement de Pho Rong">
-      </iframe>
     </div>
   </section>
 
+  <!-- Promise Section -->
+  <section class="section promise-section">
+    <div class="section-narrow promise-content">
+      <div class="section-header">
+        <div class="promise-quote-icon">❝</div>
+        <h2 class="section-title">Notre promesse</h2>
+      </div>
+      <div style="text-align: center;">
+        <p class="promise-text">
+          <span class="about-highlight">Nous ne servons pas juste du phở.</span>
+          Nous servons des années de dévouement, versées dans chaque bol.
+        </p>
+        <p class="promise-text">
+          Quand vous goûtez notre bouillon, vous goûtez la même recette que mon père
+          a perfectionnée dans les rues de Hanoï — inchangée, sans compromis, inoubliable.
+        </p>
+        <p class="promise-text">
+          Nous nous levons avant l'aube pour surveiller nos marmites. Nous refusons les raccourcis.
+          Nous croyons que <span class="about-primary">la vraie nourriture</span> ne peut pas être pressée.
+        </p>
+        <div class="promise-signature">
+          <div class="promise-signature-name">La famille Pho Rong</div>
+          <div class="promise-signature-title">Fondateurs • Depuis 2024</div>
+        </div>
+        <div class="promise-values">
+          <div class="promise-value">
+            <div class="promise-value-number">100%</div>
+            <div class="promise-value-label">Fait maison</div>
+          </div>
+          <div class="promise-value">
+            <div class="promise-value-number">Zéro</div>
+            <div class="promise-value-label">MSG ou raccourci</div>
+          </div>
+          <div class="promise-value">
+            <div class="promise-value-number">∞</div>
+            <div class="promise-value-label">Amour par bol</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Location Section -->
+  <section id="location" class="section">
+    <div class="section-wide">
+      <div class="section-header">
+        <div class="section-label">Visitez-nous</div>
+        <h2 class="section-title">Nous trouver à Laval</h2>
+      </div>
+      <div class="location-grid">
+        <div class="location-map">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2792.8!2d-73.785!3d45.575!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cc925!2s3520%20Boulevard%20Dagenais%20O%2C%20Laval%2C%20QC%20H7P%201V7!5e0!3m2!1sfr!2sca!4v1706745600000"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Carte de Pho Rong"
+            aria-label="Carte montrant l'emplacement de Pho Rong">
+          </iframe>
+        </div>
+        <div class="location-info">
+          <div class="location-item">
+            <div class="location-icon">📍</div>
+            <div>
+              <div class="location-item-title">Adresse</div>
+              <div class="location-item-text">
+                3520 Boulevard Dagenais O<br>
+                Laval, QC H7P 1V7
+              </div>
+            </div>
+          </div>
+          <div class="location-item">
+            <div class="location-icon">🕐</div>
+            <div>
+              <div class="location-item-title">Heures d'ouverture</div>
+              <div class="location-item-text">
+                Tous les jours<br>
+                10h30 – 20h30
+              </div>
+            </div>
+          </div>
+          <div class="location-item">
+            <div class="location-icon">📞</div>
+            <div>
+              <div class="location-item-title">Téléphone</div>
+              <div class="location-item-text">
+                <a href="tel:+14503149388">450-314-9388</a>
+              </div>
+            </div>
+          </div>
+          <div class="location-item">
+            <div class="location-icon">🛵</div>
+            <div>
+              <div class="location-item-title">Commande en ligne</div>
+              <div class="location-item-text">
+                <a href="https://www.ubereats.com/ca-fr/store/pho-rong/fJG6CMrkT_GGXJ2ZF3VBBA" target="_blank" rel="noopener">Uber Eats</a>
+              </div>
+            </div>
+          </div>
+          <div class="location-ctas">
+            <a href="https://maps.google.com/?q=3520+Boulevard+Dagenais+O+Laval+QC" target="_blank" rel="noopener" class="btn btn-warm">Itinéraire</a>
+            <a href="tel:+14503149388" class="btn btn-subtle">Appeler</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
   <footer>
-    <div class="footer-social">
-      <a href="https://instagram.com/phorong" target="_blank" rel="noopener">Suivez-nous sur Instagram</a>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Pho Rong</div>
+        <p class="footer-desc">
+          Apporter les saveurs authentiques du Vietnam à Laval depuis 2024.
+          Chaque bol est préparé avec amour, tradition et les meilleurs ingrédients.
+        </p>
+        <div class="footer-socials">
+          <a href="https://instagram.com/phorong" class="footer-social" target="_blank" rel="noopener" aria-label="Instagram">📸</a>
+          <a href="https://facebook.com/phorong" class="footer-social" target="_blank" rel="noopener" aria-label="Facebook">👍</a>
+          <a href="https://maps.google.com/?q=3520+Boulevard+Dagenais+O+Laval+QC" class="footer-social" target="_blank" rel="noopener" aria-label="Google Maps">📍</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-title">Liens rapides</div>
+        <div class="footer-links">
+          <a href="#menu">Menu</a>
+          <a href="#about">Notre histoire</a>
+          <a href="#location">Nous trouver</a>
+          <a href="https://www.ubereats.com/ca-fr/store/pho-rong/fJG6CMrkT_GGXJ2ZF3VBBA" target="_blank" rel="noopener">Commander</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-title">Heures</div>
+        <div class="footer-hours">
+          <div class="footer-hours-row">
+            <span>Tous les jours</span>
+            <span>10h30 – 20h30</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <p>© 2024 Pho Rong. Tous droits réservés.</p>
+    <div class="footer-bottom">
+      <div class="footer-copyright">© 2024 Pho Rong. Tous droits réservés.</div>
+      <div class="footer-legal">
+        <a href="#">Politique de confidentialité</a>
+        <a href="#">Conditions d'utilisation</a>
+      </div>
+    </div>
   </footer>
 </body>
 </html>
